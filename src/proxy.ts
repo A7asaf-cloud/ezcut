@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const PROTECTED_PATHS = ["/dashboard", "/log"];
+const PROTECTED_PATHS = ["/dashboard", "/log", "/settings"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -31,8 +31,11 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isProtected = PROTECTED_PATHS.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
+  // Exact-match or "/path/..." — plain startsWith would also match "/login"
+  // against the "/log" entry, redirecting the login page to itself.
+  const { pathname } = request.nextUrl;
+  const isProtected = PROTECTED_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
   );
 
   if (isProtected && !user) {

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EZCut</string>
+    <string name="title_activity_main">EZCut</string>
+    <string name="package_name">com.a7asaf.ezcut</string>
+    <string name="custom_url_scheme">com.a7asaf.ezcut</string>
+</resources>
